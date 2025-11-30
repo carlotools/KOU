@@ -1,1 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Laggy Page</title>
+<style>
+body {
+  background: black;
+  color: lime;
+  font-family: monospace;
+}
+canvas {
+  display: block;
+}
+</style>
+</head>
+<body>
+<h1>Warning: This page is heavy 😅</h1>
+<canvas id="c"></canvas>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
+function loop() {
+  for (let i = 0; i < 100000; i++) {  // massive loop
+    ctx.fillStyle = `rgb(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255})`;
+    ctx.fillRect(Math.random()*canvas.width, Math.random()*canvas.height, 2, 2);
+  }
+  requestAnimationFrame(loop);
+}
+
+loop();
+</script>
+</body>
+</html>
