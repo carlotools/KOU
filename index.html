@@ -1,37 +1,140 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Laggy Page</title>
+<title>System Access</title>
+
 <style>
-body {
-  background: black;
-  color: lime;
-  font-family: monospace;
+body{
+    margin:0;
+    background:black;
+    color:#00ff9c;
+    font-family:Courier New, monospace;
+    overflow:hidden;
 }
-canvas {
-  display: block;
+
+/* login screen */
+#loginBox{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    text-align:center;
+}
+
+input{
+    background:black;
+    border:2px solid #00ff9c;
+    color:#00ff9c;
+    padding:10px;
+    font-size:18px;
+    outline:none;
+}
+
+button{
+    background:#00ff9c;
+    border:none;
+    padding:10px 20px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* hacker code background */
+#code{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    opacity:0.25;
+    pointer-events:none;
+    font-size:14px;
+    line-height:14px;
+    white-space:pre;
+}
+
+/* spam text */
+.spam{
+    position:absolute;
+    font-weight:bold;
+    font-size:24px;
+    animation:spin 4s linear infinite;
+}
+
+@keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
 }
 </style>
 </head>
-<body>
-<h1>Warning: This page is heavy 😅</h1>
-<canvas id="c"></canvas>
-<script>
-const canvas = document.getElementById('c');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
 
-function loop() {
-  for (let i = 0; i < 100000; i++) {  // massive loop
-    ctx.fillStyle = `rgb(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255})`;
-    ctx.fillRect(Math.random()*canvas.width, Math.random()*canvas.height, 2, 2);
-  }
-  requestAnimationFrame(loop);
+<body>
+
+<div id="loginBox">
+    <h2>SYSTEM VERIFICATION</h2>
+    <p>Enter passphrase:</p>
+    <input id="pass" placeholder="enter text">
+    <br><br>
+    <button onclick="check()">ACCESS</button>
+    <p id="msg"></p>
+</div>
+
+<pre id="code"></pre>
+
+<script>
+
+// fake hacker scrolling code
+const code = document.getElementById("code");
+function generateCode(){
+    let text="";
+    let chars="01abcdef#@$%{}[]<>/\\";
+    for(let i=0;i<120;i++){
+        let line="";
+        for(let j=0;j<90;j++){
+            line+=chars[Math.floor(Math.random()*chars.length)];
+        }
+        text+=line+"\n";
+    }
+    code.textContent=text;
+}
+setInterval(generateCode,120);
+
+// password check
+function check(){
+    let input=document.getElementById("pass").value.toLowerCase();
+    if(input==="mwah kou"){
+        startPrank();
+    }else{
+        document.getElementById("msg").innerText="ACCESS DENIED";
+    }
 }
 
-loop();
+// prank starts
+function startPrank(){
+    document.getElementById("loginBox").style.display="none";
+
+    setInterval(()=>{
+        createSpam("mwah kou");
+        createSpam("I LOVE U");
+    },150);
+}
+
+// create flying text
+function createSpam(text){
+    let div=document.createElement("div");
+    div.className="spam";
+    div.innerText=text;
+
+    div.style.left=Math.random()*window.innerWidth+"px";
+    div.style.top=Math.random()*window.innerHeight+"px";
+    div.style.color=`hsl(${Math.random()*360},100%,50%)`;
+
+    document.body.appendChild(div);
+
+    // remove after a bit (so browser doesnt die)
+    setTimeout(()=>{div.remove();},5000);
+}
+
 </script>
+
 </body>
 </html>
